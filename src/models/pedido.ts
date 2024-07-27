@@ -4,6 +4,7 @@ class Pedido {
     fechaPedido: Date;
     estado: "pendiente" | "en proceso" | "enviado" | "entregado";
     items: ItemPedido[];
+    total: number;
   
     constructor(id: number, usuario: Usuario, fechaPedido: Date, estado: "pendiente" | "en proceso" | "enviado" | "entregado", items: ItemPedido[] = []) {
       this.id = id;
