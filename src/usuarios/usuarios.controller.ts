@@ -10,7 +10,7 @@ export class UsuariosController {
     @Post()
     registrarUsuario(
         @Body() usuario: Usuario, 
-        @Res() response: Response,
+        @Res() response: Response
     ) {
         const usuarioLocal = this.usuariosService.crearUsuario(usuario);
         if (usuarioLocal) {
@@ -54,4 +54,3 @@ export class UsuariosController {
         }
     }
 }
-

@@ -6,9 +6,9 @@ import { UsuariosModule } from './usuarios.module';
 export class UsuariosService {
     private usuarios: Usuario[] = [];
 
-    constructor(){
+    constructor() {
         this.usuarios.push(
-            new Usuario (
+            new Usuario(
                 1,
                 'mauricio',
                 'ganaroservir@gmail.com',
@@ -20,35 +20,35 @@ export class UsuariosService {
 
     crearUsuario(usuario: Usuario): Usuario {
         for (let i = 0; i < this.usuarios.length; i++) {
-          if (this.usuarios[i].correoElectronico == usuario.correoElectronico) {
-            return null;
-          }
+            if (this.usuarios[i].correoElectronico == usuario.correoElectronico) {
+                return null;
+            }
         }
         usuario.id = this.usuarios.length + 1;
         this.usuarios.push(usuario);
         return usuario;
-      }
+    }
 
     obtenerUsuario(id: number): Usuario {
         for (let i = 0; i < this.usuarios.length; i++) {
-          if (this.usuarios[i].id == id) {
-            return this.usuarios[i];
-          }
+            if (this.usuarios[i].id == id) {
+                return this.usuarios[i];
+            }
         }
         return null;
-      }
-    
+    }
+
     obtenerTodosLosUsuarios(): Usuario[] {
         return this.usuarios;
-      }
+    }
 
     eliminarUsuario(id: number): boolean {
         for (let i = 0; i < this.usuarios.length; i++) {
-          if (this.usuarios[i].id == id) {
-            this.usuarios.splice(i, 1);
-            return true;
-          }
+            if (this.usuarios[i].id == id) {
+                this.usuarios.splice(i, 1);
+                return true;
+            }
         }
         return false;
-      }  
+    }
 }
