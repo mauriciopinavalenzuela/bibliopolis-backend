@@ -1,58 +1,47 @@
-import { Body, Controller, Get, Query, Param, Post, Res, Delete } from '@nestjs/common';
-import { Response } from 'express';
-import { LibrosService } from './libros.service';
+import { Injectable } from '@nestjs/common';
 
-@Controller('libros')
-export class LibrosController {
-  constructor(private readonly librosService: LibrosService) {}
+@Injectable()
+export class LibrosService {
+  private libros: Libro[] = []; 
 
-  @Post()
-  crearLibro(
-    @Body() libro: Libro,
-    @Res() response: Response
-  ) {
-    const libroCreado = this.librosService.crearLibro(libro);
-
-    if (libroCreado) {
-      response.status(201).send(libroCreado);
-    } else {
-      response.status(400).send({ error: 'Error al crear el libro' });
-    }
+  crearLibro(libro: Libro): Libro {
+    this.libros.push(libro);
+    return libro;
   }
 
-  @Get(':isbn')
-  obtenerLibroPorIsbn(
-    @Param('isbn') isbn: string, 
-    @Res() response: Response
-  ) {
-    const libro = this.librosService.obtenerLibroPorIsbn(isbn);
-    if (libro) {
-      response.status(200).send(libro);
-    } else {
-      response.status(404).send({ error: 'Libro no existe' });
+  obtenerLibroPorIsbn(isbn: string): Libro {
+    for (let i = 0; i < this.libros.length; i++) {
+      if (this.libros[i].isbn === isbn) {
+        return this.libros[i]; 
+      }
     }
+    return null; 
   }
 
-  @Get()
-  obtenerTodosLosLibros(
-    @Query('autor') autor: string,
-    @Query('genero') genero: string,
-    @Res() response: Response
-  ) {
-    const libros = this.librosService.obtenerTodosLosLibros(autor, genero);
-    response.status(200).send(libros);
+  obtenerTodosLosLibros(autor: string, genero: string): Libro[] {
+    let resultados = [];
+
+    for (let i = 0; i < this.libros.length; i++) {
+      const libro = this.libros[i];
+      if (autor && libro.autor !== autor) {
+        continue; 
+      }
+      if (genero && libro.genero !== genero) {
+        continue; 
+      }
+      resultados.push(libro); 
+    }
+
+    return resultados;
   }
 
-  @Delete(':isbn')
-  eliminarLibro(
-    @Param('isbn') isbn: string, 
-    @Res() response: Response
-  ) {
-    const resultado = this.librosService.eliminarLibro(isbn);
-    if (resultado) {
-      response.status(204).send(); 
-    } else {
-      response.status(404).send({ error: 'Libro no encontrado' }); 
+  eliminarLibro(isbn: string): boolean {
+    for (let i = 0; i < this.libros.length; i++) {
+      if (this.libros[i].isbn === isbn) {
+        this.libros.splice(i, 1); 
+        return true; 
+      }
     }
+    return false; 
   }
 }
